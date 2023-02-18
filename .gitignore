@@ -1,0 +1,8 @@
+infra/terraform/app.zip
+
+**/.terraform/*
+
+*.tfstate
+*.tfstate.*
+
+reports
