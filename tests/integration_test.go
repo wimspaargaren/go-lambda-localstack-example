@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/ory/dockertest/v3"
+	"github.com/ory/dockertest/v3/docker"
 	dc "github.com/ory/dockertest/v3/docker"
 	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/suite"
@@ -76,9 +77,31 @@ func (s *LocalstackIntegrationSuite) startLocalStack() {
 		Repository:   "localstack/localstack",
 		Tag:          "latest",
 		PortBindings: res,
+	}, func(config *docker.HostConfig) {
+		// set AutoRemove to true so that stopped container goes away by itself
+		config.AutoRemove = true
+		config.RestartPolicy = docker.RestartPolicy{
+			Name: "no",
+		}
 	})
 	s.NoError(err)
 	s.localStack = localStack
+	fmt.Println("localStack.Container.LogPath", localStack.Container.LogPath)
+	ctx := context.Background()
+	opts := docker.LogsOptions{
+		Context: ctx,
+
+		Stderr:      true,
+		Stdout:      true,
+		Follow:      true,
+		Timestamps:  true,
+		RawTerminal: true,
+
+		Container: localStack.Container.ID,
+
+		OutputStream: s.logger.Writer(),
+	}
+	s.pool.Client.Logs(opts)
 
 	err = s.pool.Retry(func() error {
 		req, err := http.NewRequestWithContext(context.TODO(), http.MethodGet, fmt.Sprintf("http://%s:%s/_localstack/health", host, localStackPort), nil)
