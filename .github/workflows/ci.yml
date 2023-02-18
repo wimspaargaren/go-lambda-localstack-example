@@ -9,7 +9,7 @@ env:
   GO_VERSION: '1.20'
 
 jobs:
-  go-mod:
+  verify-go-mod:
     runs-on: ubuntu-latest
     steps:
       - name: Install Go
@@ -22,7 +22,7 @@ jobs:
         run: |
           go mod tidy
           git diff --exit-code go.mod
-  golangci:
+  lint:
     name: lint
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +34,7 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.51.1
-  ci-init:
+  integration-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-go@v3
@@ -44,16 +44,6 @@ jobs:
       - name: Go test
         run: |
           make ci-init
-  integration-test:
-    runs-on: ubuntu-latest
-    needs: ci-init
-    steps:
-      - uses: actions/setup-go@v3
-        with:
-          go-version: ${{ env. GO_VERSION }}
-      - uses: actions/checkout@v3
-      - name: Go test
-        run: |
           make ci-test-integration
   unit-test:
     runs-on: ubuntu-latest
