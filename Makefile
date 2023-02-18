@@ -51,5 +51,8 @@ ci-init: | zip
 	# @docker build -t localstack-lambda-ci --progress=plain . #debug docker build
 	@docker build -t localstack-lambda-ci .
 
+ci-test:
+	@docker run localstack-lambda-ci go test ./...
+
 ci-test-integration:
 	@docker run --network=host -v "/var/run/docker.sock:/var/run/docker.sock:rw" localstack-lambda-ci go test --tags=integration ./...
