@@ -77,31 +77,9 @@ func (s *LocalstackIntegrationSuite) startLocalStack() {
 		Repository:   "localstack/localstack",
 		Tag:          "latest",
 		PortBindings: res,
-	}, func(config *docker.HostConfig) {
-		// set AutoRemove to true so that stopped container goes away by itself
-		config.AutoRemove = true
-		config.RestartPolicy = docker.RestartPolicy{
-			Name: "no",
-		}
 	})
 	s.NoError(err)
 	s.localStack = localStack
-	fmt.Println("localStack.Container.LogPath", localStack.Container.LogPath)
-	ctx := context.Background()
-	opts := docker.LogsOptions{
-		Context: ctx,
-
-		Stderr:      true,
-		Stdout:      true,
-		Follow:      true,
-		Timestamps:  true,
-		RawTerminal: true,
-
-		Container: localStack.Container.ID,
-
-		OutputStream: s.logger.Writer(),
-	}
-	s.pool.Client.Logs(opts)
 
 	err = s.pool.Retry(func() error {
 		req, err := http.NewRequestWithContext(context.TODO(), http.MethodGet, fmt.Sprintf("http://%s:%s/_localstack/health", host, localStackPort), nil)
@@ -119,6 +97,26 @@ func (s *LocalstackIntegrationSuite) startLocalStack() {
 	})
 	s.NoError(err)
 	s.logger.Info("localStack is healthy")
+	fmt.Println("localStack.Container.LogPath", localStack.Container.LogPath)
+	go func() {
+		ctx := context.Background()
+		opts := docker.LogsOptions{
+			Context: ctx,
+
+			Stderr:      true,
+			Stdout:      true,
+			Follow:      true,
+			Timestamps:  true,
+			RawTerminal: true,
+
+			Container: localStack.Container.ID,
+
+			OutputStream: s.logger.Writer(),
+		}
+		err = s.pool.Client.Logs(opts)
+		s.NoError(err)
+	}()
+
 }
 
 func (s *LocalstackIntegrationSuite) applyTerraform() {
