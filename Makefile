@@ -10,7 +10,7 @@ terraform:
 	@tflocal -chdir=infra/terraform apply --auto-approve
 
 localstack:
-	@docker run --rm -it -p 4566:4566 -p 4510-4559:4510-4559 -e SERVICES=lambda localstack/localstack
+	@docker run --rm -it -p 4566:4566 -p 4510-4559:4510-4559 localstack/localstack
 
 test:
 	@mkdir -p reports

@@ -76,14 +76,12 @@ func (s *LocalstackIntegrationSuite) startLocalStack() {
 		Repository:   "localstack/localstack",
 		Tag:          "latest",
 		PortBindings: res,
-		// Only start Lambda for now
-		Env: []string{"SERVICES=lambda"},
 	})
 	s.NoError(err)
 	s.localStack = localStack
 
 	err = s.pool.Retry(func() error {
-		req, err := http.NewRequestWithContext(context.TODO(), http.MethodGet, fmt.Sprintf("http://%s:%s/health", host, localStackPort), nil)
+		req, err := http.NewRequestWithContext(context.TODO(), http.MethodGet, fmt.Sprintf("http://%s:%s/_localstack/health", host, localStackPort), nil)
 		s.NoError(err)
 		resp, err := s.httpClient.Do(req)
 		if err != nil {

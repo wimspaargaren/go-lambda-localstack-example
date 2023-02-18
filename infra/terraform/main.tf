@@ -26,6 +26,7 @@ resource "aws_lambda_function" "test_lambda" {
   role          = "arn:aws:iam::123456:role/irrelevant"
   handler       = "app"
   runtime       = "go1.x"
+  timeout       = 30
 
   environment {
     variables = {
