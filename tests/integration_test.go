@@ -18,6 +18,7 @@ import (
 	dc "github.com/ory/dockertest/v3/docker"
 	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/suite"
+
 	"github.com/wimspaargaren/go-lambda-localstack-example/internal/api"
 )
 
