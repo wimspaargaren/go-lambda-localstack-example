@@ -6,6 +6,7 @@ zip:
 	@rm app
 
 terraform:
+	@tflocal -chdir=infra/terraform init
 	@tflocal -chdir=infra/terraform apply --auto-approve
 
 localstack:

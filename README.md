@@ -25,12 +25,7 @@ Run `make ci-init && make ci-test-integration`
 - Run `make localstack`
 - Run `make terraform`
 - Use the output `api_gw_id` to compose the url
-- http://localhost:4566/restapis/<api_gw_id>/test/_user_request_/hello-world
-
-### Example curl:
-```
-curl --location --request GET 'http://localhost:4566/restapis/m5zls14ukb/test/_user_request_/hello-world'
-```
+- Curl the hello world endpoint: `curl --location --request GET "http://localhost:4566/restapis/$(tflocal -chdir=infra/terraform output -raw api_gw_id)/test/_user_request_/hello-world"`
 
 ## Run component tests
 
