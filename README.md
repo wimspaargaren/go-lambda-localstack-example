@@ -8,7 +8,7 @@ This repository demonstrates an example on how to run a Go lambda on localstack,
 
 - Docker
 
-## Run component tests
+## Run integration tests
 
 Run `make ci-init && make ci-test-integration`
 
@@ -27,6 +27,6 @@ Run `make ci-init && make ci-test-integration`
 - Use the output `api_gw_id` to compose the url
 - Curl the hello world endpoint: `curl --location --request GET "http://localhost:4566/restapis/$(tflocal -chdir=infra/terraform output -raw api_gw_id)/test/_user_request_/hello-world"`
 
-## Run component tests
+## Run integration tests
 
 - Run `make test-integration`

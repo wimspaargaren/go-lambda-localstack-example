@@ -110,6 +110,7 @@ func (s *LocalstackIntegrationSuite) applyTerraform() {
 	s.NoError(err)
 
 	s.lambdaBaseURL = fmt.Sprintf("http://%s:%s/restapis/%s/test/_user_request_", host, localStackPort, strings.TrimSpace(string(output)))
+	s.logger.Infof("base url: %s", s.lambdaBaseURL)
 }
 
 type Response struct {
@@ -117,6 +118,8 @@ type Response struct {
 }
 
 func (s *LocalstackIntegrationSuite) TestHelloWorld() {
+	url := fmt.Sprintf("%s/hello-world", s.lambdaBaseURL)
+	s.logger.Infof("making request to: %s", url)
 	req, err := http.NewRequestWithContext(context.TODO(), http.MethodGet, fmt.Sprintf("%s/hello-world", s.lambdaBaseURL), nil)
 	s.NoError(err)
 	resp, err := s.httpClient.Do(req)
@@ -163,7 +166,10 @@ func (s *LocalstackIntegrationSuite) TestYourName() {
 			reqBytes, err := json.Marshal(test.Body)
 			s.NoError(err)
 
-			req, err := http.NewRequestWithContext(context.TODO(), http.MethodPost, fmt.Sprintf("%s/your-name", s.lambdaBaseURL), bytes.NewReader(reqBytes))
+			url := fmt.Sprintf("%s/your-name", s.lambdaBaseURL)
+			s.logger.Infof("making request to: %s", url)
+
+			req, err := http.NewRequestWithContext(context.TODO(), http.MethodPost, url, bytes.NewReader(reqBytes))
 			s.NoError(err)
 			resp, err := s.httpClient.Do(req)
 			s.NoError(err)
