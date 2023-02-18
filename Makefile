@@ -22,7 +22,7 @@ test:
 
 test-integration:
 	@mkdir -p reports
-	@go test -coverprofile=reports/codecoverage_all.cov ./... --tags=integration -cover -race -p=4
+	@go test -coverprofile=reports/codecoverage_all.cov ./... --tags=integration -cover -race -p=4 -v
 	@go tool cover -func=reports/codecoverage_all.cov > reports/functioncoverage.out
 	@go tool cover -html=reports/codecoverage_all.cov -o reports/coverage.html
 	@echo "View report at $(PWD)/reports/coverage.html"
@@ -55,4 +55,4 @@ ci-test:
 	@docker run localstack-lambda-ci go test ./...
 
 ci-test-integration:
-	@docker run --network=host -v "/var/run/docker.sock:/var/run/docker.sock:rw" localstack-lambda-ci go test --tags=integration ./...
+	@docker run --network=host -v "/var/run/docker.sock:/var/run/docker.sock:rw" localstack-lambda-ci go test --tags=integration -v ./...
