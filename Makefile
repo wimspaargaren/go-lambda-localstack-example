@@ -28,7 +28,10 @@ test-integration: | zip
 	@echo "View report at $(PWD)/reports/coverage.html"
 	@tail -n 1 reports/functioncoverage.out
 
-lint:
+$(GOBIN)/golangci-lint:
+	@go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.1
+
+lint: | $(GOBIN)/golangci-lint
 	@echo Linting...
 	@golangci-lint  -v --concurrency=3 --config=.golangci.yml --issues-exit-code=1 run \
 	--out-format=colored-line-number 
@@ -44,8 +47,8 @@ $(GOBIN)/gci:
 	@go install github.com/daixiang0/gci@latest
 	@go mod tidy
 
-gci:
-	@gci write --Section Standard --Section Default --Section "Prefix(github.com/wimspaargaren/go-lambda-localstack-example)" $(shell ls  -d $(PWD)/*)
+gci: | $(GOBIN)/gci
+	@gci write --section Standard --section Default --section "Prefix(github.com/wimspaargaren/go-lambda-localstack-example)" $(shell ls  -d $(PWD)/*)
 
 # Debug: @docker build -t localstack-lambda-ci --progress=plain . #debug docker build
 ci-init: | zip

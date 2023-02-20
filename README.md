@@ -1,6 +1,3 @@
-Still issue:
- act --container-architecture linux/amd64 pull_request
-
 # Go Lambda
 
 This repository demonstrates an example on how to run a Go lambda on localstack, where localstack is provisioned using tflocal (a localstack specific wrapper around Terraform). In addition, the repository contains an example on levarage localstack in order to integration test your Go Lambda.
