@@ -8,14 +8,16 @@ provider "aws" {
   skip_credentials_validation = true
   skip_metadata_api_check     = true
   skip_requesting_account_id  = true
+
+  endpoints {
+    apigateway     = "http://localhost:4566"
+    apigatewayv2   = "http://localhost:4566"
+    lambda         = "http://localhost:4566"
+  }
 }
 
 terraform {
   backend "local" {}
-}
-
-resource "aws_s3_bucket" "test-bucket" {
-  bucket = "my-bucket"
 }
 
 resource "aws_lambda_function" "test_lambda" {

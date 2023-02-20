@@ -1,7 +1,7 @@
 .PHONY: zip localstack test
 
 zip:
-	@GOARCH=amd64 GOOS=linux go build -o app ./cmd/api
+	@CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o app ./cmd/api
 	@zip infra/terraform/app.zip app
 	@rm app
 
@@ -20,7 +20,7 @@ test:
 	@echo "View report at $(PWD)/reports/coverage.html"
 	@tail -n 1 reports/functioncoverage.out
 
-test-integration:
+test-integration: | zip
 	@mkdir -p reports
 	@go test -coverprofile=reports/codecoverage_all.cov ./... --tags=integration -cover -race -p=4 -v
 	@go tool cover -func=reports/codecoverage_all.cov > reports/functioncoverage.out
@@ -47,8 +47,8 @@ $(GOBIN)/gci:
 gci:
 	@gci write --Section Standard --Section Default --Section "Prefix(github.com/wimspaargaren/go-lambda-localstack-example)" $(shell ls  -d $(PWD)/*)
 
+# Debug: @docker build -t localstack-lambda-ci --progress=plain . #debug docker build
 ci-init: | zip
-	# @docker build -t localstack-lambda-ci --progress=plain . #debug docker build
 	@docker build -t localstack-lambda-ci .
 
 ci-test:
