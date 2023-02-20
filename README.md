@@ -1,6 +1,6 @@
 # Go Lambda
 
-This repository demonstrates an example on how to run a Go lambda on localstack, where localstack is provisioned using tflocal (a localstack specific wrapper around Terraform). In addition, the repository contains an example on levarage localstack in order to integration test your Go Lambda.
+This repository demonstrates an example on how to run a simple Go lambda with an AWS API Gateway on localstack. Here localstack is provisioned using tflocal (a localstack specific wrapper around Terraform). In addition, the repository contains an example on levaraging localstack in combination with [ory/dockertest](https://github.com/ory/dockertest) in order to integration test your Go Lambda.
 
 # On my virtual machine
 
@@ -28,5 +28,7 @@ Run `make ci-init && make ci-test-integration`
 - Curl the hello world endpoint: `curl --location --request GET "http://localhost:4566/restapis/$(tflocal -chdir=infra/terraform output -raw api_gw_id)/test/_user_request_/hello-world"`
 
 ## Run integration tests
+
+Make sure you don't have a running localstack container.
 
 - Run `make test-integration`
