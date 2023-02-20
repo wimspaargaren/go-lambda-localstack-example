@@ -1,4 +1,4 @@
-.PHONY: zip localstack test
+.PHONY: zip terraform localstack test test-integration lint gofumpt gci ci-init ci-test ci-test-integration
 
 zip:
 	@CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o app ./cmd/api
