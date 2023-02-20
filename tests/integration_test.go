@@ -15,7 +15,6 @@ import (
 	"time"
 
 	"github.com/ory/dockertest/v3"
-	"github.com/ory/dockertest/v3/docker"
 	dc "github.com/ory/dockertest/v3/docker"
 	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/suite"
@@ -97,10 +96,9 @@ func (s *LocalstackIntegrationSuite) startLocalStack() {
 	})
 	s.NoError(err)
 	s.logger.Info("localStack is healthy")
-	fmt.Println("localStack.Container.LogPath", localStack.Container.LogPath)
 	go func() {
 		ctx := context.Background()
-		opts := docker.LogsOptions{
+		opts := dc.LogsOptions{
 			Context: ctx,
 
 			Stderr:      true,
@@ -113,10 +111,9 @@ func (s *LocalstackIntegrationSuite) startLocalStack() {
 
 			OutputStream: s.logger.Writer(),
 		}
-		err = s.pool.Client.Logs(opts)
+		err := s.pool.Client.Logs(opts)
 		s.NoError(err)
 	}()
-
 }
 
 func (s *LocalstackIntegrationSuite) applyTerraform() {
