@@ -1,16 +1,17 @@
 .PHONY: zip terraform localstack test test-integration lint gofumpt gci ci-init ci-test ci-test-integration
 
 zip:
-	@CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o app ./cmd/api
-	@zip infra/terraform/app.zip app
-	@rm app
+	@CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o bootstrap ./cmd/api
+	@zip infra/terraform/bootstrap.zip bootstrap
+	@rm bootstrap
 
 terraform:
 	@tflocal -chdir=infra/terraform init
 	@tflocal -chdir=infra/terraform apply --auto-approve
 
 localstack:
-	@docker run --rm -it -p 4566:4566 -p 4510-4559:4510-4559 localstack/localstack
+	@docker compose build
+	@docker compose up -d
 
 test:
 	@mkdir -p reports

@@ -7,3 +7,5 @@ infra/terraform/.terraform.lock.hcl
 *.tfstate.*
 
 reports
+
+volume/*
