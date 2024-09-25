@@ -23,11 +23,12 @@ terraform {
 resource "aws_lambda_function" "test_lambda" {
   # If the file is not in the current working directory you will need to include a
   # path.module in the filename.
-  filename      = "app.zip"
+  filename      = "bootstrap.zip"
   function_name = "test_lambda"
-  role          = "arn:aws:iam::123456:role/irrelevant"
-  handler       = "app"
-  runtime       = "go1.x"
+  role          = "arn:aws:iam::999999999999:role/irrelevant"
+  handler       = "bootstrap.handler"
+  architectures = ["x86_64"]
+  runtime       = "provided.al2023"
   timeout       = 30
 
   environment {
