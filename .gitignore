@@ -1,4 +1,4 @@
-infra/terraform/app.zip
+infra/terraform/*.zip
 infra/terraform/.terraform.lock.hcl
 
 **/.terraform/*
