@@ -26,9 +26,9 @@ resource "aws_lambda_function" "test_lambda" {
   filename      = "bootstrap.zip"
   function_name = "test_lambda"
   role          = "arn:aws:iam::999999999999:role/irrelevant"
-  handler       = "bootstrap.handler"
+  handler       = "bootstrap"
   architectures = ["x86_64"]
-  runtime       = "provided.al2023"
+  runtime       = "provided.al2"
   timeout       = 30
 
   environment {

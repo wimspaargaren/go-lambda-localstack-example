@@ -76,6 +76,9 @@ func (s *LocalstackIntegrationSuite) startLocalStack() {
 		Repository:   "localstack/localstack",
 		Tag:          "latest",
 		PortBindings: res,
+		Mounts: []string{
+			"/var/run/docker.sock:/var/run/docker.sock",
+		},
 	})
 	s.NoError(err)
 	s.localStack = localStack
